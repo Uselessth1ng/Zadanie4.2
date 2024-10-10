@@ -2,9 +2,6 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 import static com.codeborne.selenide.Selenide.*;
@@ -88,37 +85,30 @@ public class Tests
         System.out.println("Количество попыток: " + (counter + 1));
     }
 
-    @Test
-    public void testAREls(){
-        $x("//a[@href='/add_remove_elements/']").click();
-        ElementsCollection el;
-        for (int i = 0; i < 5; i++) {
-            $x("//div[@class='example']/button").click();
-            el = $$x("//div[@id='elements']/button");
-            System.out.println(el.get(el.size() - 1).getText() + "\n");
-        }
-        int delNum;
-        el = $$x("//div[@id='elements']/button");
+    public void buttonsInfo(){
+        ElementsCollection el = $$x("//div[@id='elements']/button");
         System.out.println("Количество кнопок: " + el.size());
         for (SelenideElement button:el){
             System.out.println(button.getText());
         }
         System.out.println();
-        Integer[] array = {1, 2, 3, 4, 5};
-        ArrayList<Integer> buttons = new ArrayList<Integer>(Arrays.asList(array));
+    }
+
+    @Test
+    public void testAREls(){
+        $x("//a[@href='/add_remove_elements/']").click();
+        for (int i = 0; i < 5; i++) {
+            $x("//div[@class='example']/button").click();
+            ElementsCollection el = $$x("//div[@id='elements']/button");
+            System.out.println(el.get(el.size() - 1).getText() + "\n");
+        }
+        int delNum;
+        buttonsInfo();
         for (int i = 0; i < 3; i++){
-            delNum = buttons.get(new Random().nextInt(buttons.size()));
+            delNum = new Random().nextInt(5 - i) + 1;
             System.out.println("Нажата кнопка: " + delNum);
             $x("//div[@id='elements']/button[" + delNum + "]").click();
-            el = $$x("//div[@id='elements']/button");
-            System.out.println("Количество кнопок: " + el.size());
-            for (SelenideElement button:el){
-                System.out.println(button.getText());
-            }
-            System.out.println();
-            if (i == 2) break;
-            else buttons.remove(buttons.indexOf(delNum));
-            buttons.remove(buttons.size() - 1);
+            buttonsInfo();
         }
     }
 
